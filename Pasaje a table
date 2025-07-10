@@ -1,0 +1,16 @@
+
+Usuarios (correo, contraseña_hash, dirección, idUsuario)
+Cliente (idUsuario, ci, Nombre, Apellido)
+Proveedor (idUsuario, rut, NombreFantasia, RazonSocial)
+Empleado (idUsuario, NumeroFuncionario)
+Administrador (NumeroFuncionarioEmpleado)
+ServicioTecnico (NumeroFuncionarioEmpleado)
+AtencionAlCliente (NumeroFuncionarioEmpleado)
+Telefono (idUsuario, teléfono)
+Mensaje (IdMensaje, IdUsuarioEmisor, IdUsuarioReceptor, contenido, FechaHora, ConfLectura)
+Servicio (IdServicio, RUTProveedor, Titulo, Descripción, Precio, FechaPublicacion, ImagenURL)
+Categoria (IdServicio, Categoria)
+Disponibilidad (IdDisponibilidad, RUTProveedor, Estado)
+Horario (idDisponibilidad, Horario)
+Reserva (idReserca, CiCliente, IdServicio, FechaReserva, Hora, Estado, puntaje, comentario)
+
