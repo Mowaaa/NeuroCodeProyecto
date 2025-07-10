@@ -1,0 +1,101 @@
+CREATE DATABASE IF NOT exists proyecto;
+USE proyecto;
+
+CREATE TABLE USUARIOS (
+    ID_Usuario INT AUTO_INCREMENT primary key,
+    Correo VARCHAR(50) NOT NULL unique,
+    Contraseña VARCHAR(30) NOT NULL,
+    Direccion VARCHAR(200),
+    Telefono VARCHAR(20)
+);
+
+CREATE TABLE MENSAJES (
+    ID_Mensaje INT AUTO_INCREMENT primary key,
+    ID_UsuarioEmisor INT NOT NULL,
+    ID_UsuarioReceptor INT NOT NULL,
+    Contenido TEXT NOT NULL,
+    FechaHora DATETIME NOT NULL,
+    ConLectura BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (ID_UsuarioEmisor) REFERENCES USUARIOS(ID_Usuario),
+    FOREIGN KEY (ID_UsuarioReceptor) REFERENCES USUARIOS(ID_Usuario)
+);
+
+CREATE TABLE CLIENTE (
+    CI VARCHAR(20),
+    ID_Usuario INT,
+    Nombre VARCHAR(100) NOT NULL,
+    Apellido VARCHAR(100) NOT NULL,
+    primary key(CI, ID_Usuario),
+    FOREIGN KEY (ID_Usuario) REFERENCES USUARIOS(ID_Usuario)
+);
+
+CREATE TABLE EMPLEADO (
+    NumeroFuncionario INT PRIMARY KEY,
+    ID_Usuario INT,
+    FOREIGN KEY (ID_Usuario) REFERENCES USUARIOS(ID_Usuario)
+);
+
+CREATE TABLE ADMINISTRADOR (
+    NumeroFuncionario INT PRIMARY KEY,
+    FOREIGN KEY (NumeroFuncionario) REFERENCES EMPLEADO(NumeroFuncionario)
+);
+
+CREATE TABLE ATENCION_CLIENTE (
+    NumeroFuncionario INT PRIMARY KEY,
+    FOREIGN KEY (NumeroFuncionario) REFERENCES EMPLEADO(NumeroFuncionario)
+);
+
+CREATE TABLE SERVICIO_TECNICO (
+    NumeroFuncionario INT PRIMARY KEY,
+    FOREIGN KEY (NumeroFuncionario) REFERENCES EMPLEADO(NumeroFuncionario)
+);
+
+CREATE TABLE PROVEEDOR (
+    RUT VARCHAR(20),
+    ID_Usuario int,
+    CP VARCHAR(10),
+    RazonSocial VARCHAR(150) NOT NULL,
+    NombreFantasia VARCHAR(150),
+    primary key (RUT, ID_Usuario),
+    foreign key (ID_Usuario) references USUARIOS(ID_Usuario)
+);
+
+CREATE TABLE SERVICIOS (
+    ID_Servicio INT AUTO_INCREMENT,
+    RUT VARCHAR(20),
+    Titulo VARCHAR(100) NOT NULL,
+    Descripcion TEXT,
+    Precio DECIMAL(10,2),
+    FechaPublicacion DATE,
+    ImagenURL TEXT,
+    Categorias VARCHAR(100),
+    CP VARCHAR(10),
+    primary key (id_Servicio, RUT),
+    FOREIGN KEY (RUT) REFERENCES PROVEEDOR(RUT)
+);
+
+CREATE TABLE DISPONIBILIDAD (
+    ID_Disponibilidad INT AUTO_INCREMENT PRIMARY KEY,
+    RUT VARCHAR(20),
+    Horario TIME,
+    Estado VARCHAR(50),
+    FOREIGN KEY (RUT) REFERENCES PROVEEDOR(RUT)
+);
+
+CREATE TABLE RESERVA (
+    ID_Reserva INT AUTO_INCREMENT PRIMARY KEY,
+    CI VARCHAR(20),
+    ID_Servicio INT,
+    Estado VARCHAR(50),
+    FechaReserva DATE,
+    Hora TIME,
+    FOREIGN KEY (CI) REFERENCES CLIENTE(CI),
+    FOREIGN KEY (ID_Servicio) REFERENCES SERVICIOS(ID_Servicio)
+);
+
+CREATE TABLE CALIFICACION (
+    ID_Reserva INT PRIMARY KEY,
+    Puntaje INT CHECK (Puntaje BETWEEN 1 AND 5),
+    Comentario TEXT,
+    FOREIGN KEY (ID_Reserva) REFERENCES RESERVA(ID_Reserva)
+);
